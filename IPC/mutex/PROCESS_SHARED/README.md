@@ -1,6 +1,6 @@
 # 互斥量的共享属性
 
-原文：[互斥量的共享属性](https://allen.blog.csdn.net/article/details/62235932?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control)
+原文：[互斥量的共享属性](https://blog.csdn.net/q1007729991/article/details/62235932)
 
 本实例是在共享内存中存储互斥量`pthread_mutex_t`，实现进程间的互斥。
 `pthread_mutex_t`默认是不能在进程间共享的，需要设置`PTHREAD_PROCESS_SHARED`属性才能在进程间共享。
