@@ -17,46 +17,58 @@ pthread_rwlock_t rwlock; //读写锁
 int num = 1;
 
 //读操作，其他线程允许读操作，却不允许写操作
-void *fun1(void *arg)
+void *read1(void *arg)
 {
+	pthread_t thread_id = 1;
 	while (1) {
 		pthread_rwlock_rdlock(&rwlock);
-		printf("read num first===%d\n", num);
+		printf("[thread %lu] read %d lock\n", thread_id, num);
+		sleep(1);
+		printf("[thread %lu] read %d unlock\n", thread_id, num);
 		pthread_rwlock_unlock(&rwlock);
 		sleep(1);
 	}
 }
 
 //读操作，其他线程允许读操作，却不允许写操作
-void *fun2(void *arg)
+void *read2(void *arg)
 {
+	pthread_t thread_id = 2;
 	while (1) {
 		pthread_rwlock_rdlock(&rwlock);
-		printf("read num second===%d\n", num);
-		pthread_rwlock_unlock(&rwlock);
+		printf("[thread %lu] read %d lock\n", thread_id, num);
 		sleep(2);
+		printf("[thread %lu] read %d unlock\n", thread_id, num);
+		pthread_rwlock_unlock(&rwlock);
+		sleep(1);
 	}
 }
 
 //写操作，其它线程都不允许读或写操作
-void *fun3(void *arg)
+void *write1(void *arg)
 {
+	pthread_t thread_id = 3;
 	while (1) {
 		pthread_rwlock_wrlock(&rwlock);
 		num++;
-		printf("write thread first\n");
+		printf("[thread %lu] write %d lock\n", thread_id, num);
+		sleep(1);
+		printf("[thread %lu] write %d unlock\n", thread_id, num);
 		pthread_rwlock_unlock(&rwlock);
-		sleep(2);
+		sleep(1);
 	}
 }
 
 //写操作，其它线程都不允许读或写操作
-void *fun4(void *arg)
+void *write2(void *arg)
 {
+	pthread_t thread_id = 4;
 	while (1) {
 		pthread_rwlock_wrlock(&rwlock);
 		num++;
-		printf("write thread second\n");
+		printf("[thread %lu] write %d lock\n", thread_id, num);
+		sleep(2);
+		printf("[thread %lu] write %d unlock\n", thread_id, num);
 		pthread_rwlock_unlock(&rwlock);
 		sleep(1);
 	}
@@ -69,10 +81,10 @@ int main()
 	pthread_rwlock_init(&rwlock, NULL); //初始化一个读写锁
 
 	//创建线程
-	pthread_create(&ptd1, NULL, fun1, NULL);
-	pthread_create(&ptd2, NULL, fun2, NULL);
-	pthread_create(&ptd3, NULL, fun3, NULL);
-	pthread_create(&ptd4, NULL, fun4, NULL);
+	pthread_create(&ptd1, NULL, read1, NULL);
+	pthread_create(&ptd2, NULL, read2, NULL);
+	pthread_create(&ptd3, NULL, write1, NULL);
+	pthread_create(&ptd4, NULL, write2, NULL);
 
 	//等待线程结束，回收其资源
 	pthread_join(ptd1, NULL);
